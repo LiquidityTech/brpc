@@ -25,7 +25,7 @@ build --conlyopt="-std=gnu11"
 # (Workaround for https://github.com/bazelbuild/rules_foreign_cc/issues/421)
 build --copt=-fPIC
 build --fission=dbg,opt
-build --features=per_object_debug_info
+# build --features=per_object_debug_info
 
 # We already have absl in the build, define absl=1 to tell googletest to use absl for backtrace.
 build --define absl=1

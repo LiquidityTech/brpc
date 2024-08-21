@@ -24,43 +24,43 @@ load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 # Constants
 #
 
-BAZEL_IO_VERSION = "4.2.2"  # 2021-12-03T09:26:35Z
+BAZEL_IO_VERSION = "4.2.4"
 
 BAZEL_IO_SHA256 = "4c179ce66bbfff6ac5d81b8895518096e7f750866d08da2d4a574d1b8029e914"
 
-BAZEL_SKYLIB_VERSION = "1.1.1"  # 2021-09-27T17:33:49Z
+BAZEL_SKYLIB_VERSION = "1.2.1"
 
-BAZEL_SKYLIB_SHA256 = "c6966ec828da198c5d9adbaa94c05e3a1c7f21bd012a0b29ba8ddbccb2c93b0d"
+BAZEL_SKYLIB_SHA256 = "f7be3474d42aae265405a592bb7da8e171919d74c16f082a5457840f06054728"
 
-BAZEL_PLATFORMS_VERSION = "0.0.4"  # 2021-02-26
+BAZEL_PLATFORMS_VERSION = "0.0.10"
 
-BAZEL_PLATFORMS_SHA256 = "079945598e4b6cc075846f7fd6a9d0857c33a7afc0de868c2ccb96405225135d"
+BAZEL_PLATFORMS_SHA256 = "218efe8ee736d26a3572663b374a253c012b716d8af0c07e842e82f238a0a7ee"
 
-RULES_PROTO_TAG = "4.0.0"  # 2021-09-15T14:13:21Z
+RULES_PROTO_VERSION = "4.0.0-3.20.0"
 
-RULES_PROTO_SHA256 = "66bfdf8782796239d3875d37e7de19b1d94301e8972b3cbd2446b332429b4df1"
+RULES_PROTO_SHA256 = "e017528fd1c91c5a33f15493e3a398181a9e821a804eb7ff5acdd1d2d6c2b18d"
 
-RULES_CC_COMMIT_ID = "0913abc3be0edff60af681c0473518f51fb9eeef"  # 2021-08-12T14:14:28Z
+RULES_CC_VERSION = "0.0.2"
 
-RULES_CC_SHA256 = "04d22a8c6f0caab1466ff9ae8577dbd12a0c7d0bc468425b75de094ec68ab4f9"
+RULES_CC_SHA256 = "58bff40957ace85c2de21ebfc72e53ed3a0d33af8cc20abd0ceec55c63be7de2"
 
 #
 # Starlark libraries
 #
 
-http_archive(
-    name = "io_bazel",
-    sha256 = BAZEL_IO_SHA256,
-    strip_prefix = "bazel-" + BAZEL_IO_VERSION,
-    url = "https://github.com/bazelbuild/bazel/archive/" + BAZEL_IO_VERSION + ".zip",
-)
+# http_archive(
+#    name = "io_bazel",
+#    # sha256 = BAZEL_IO_SHA256,
+#    strip_prefix = "bazel-" + BAZEL_IO_VERSION,
+#    url = "https://github.com/bazelbuild/bazel/archive/refs/tags/4.2.4.zip",
+# )
 
 http_archive(
     name = "bazel_skylib",
     sha256 = BAZEL_SKYLIB_SHA256,
     urls = [
-        "https://github.com/bazelbuild/bazel-skylib/releases/download/{version}/bazel-skylib-{version}.tar.gz".format(version = BAZEL_SKYLIB_VERSION),
-        "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/{version}/bazel-skylib-{version}.tar.gz".format(version = BAZEL_SKYLIB_VERSION),
+        "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.2.1/bazel-skylib-1.2.1.tar.gz",
+        "https://github.com/bazelbuild/bazel-skylib/releases/download/1.2.1/bazel-skylib-1.2.1.tar.gz",
     ],
 )
 
@@ -76,25 +76,22 @@ http_archive(
 http_archive(
     name = "rules_proto",
     sha256 = RULES_PROTO_SHA256,
-    strip_prefix = "rules_proto-{version}".format(version = RULES_PROTO_TAG),
-    urls = ["https://github.com/bazelbuild/rules_proto/archive/refs/tags/{version}.tar.gz".format(version = RULES_PROTO_TAG)],
+    strip_prefix = "rules_proto-{version}".format(version = RULES_PROTO_VERSION),
+    urls = ["https://github.com/bazelbuild/rules_proto/archive/refs/tags/{version}.tar.gz".format(version = RULES_PROTO_VERSION)],
 )
 
 http_archive(
     name = "rules_cc",
-    sha256 = RULES_CC_SHA256,
-    strip_prefix = "rules_cc-{commit_id}".format(commit_id = RULES_CC_COMMIT_ID),
-    urls = [
-        "https://github.com/bazelbuild/rules_cc/archive/{commit_id}.tar.gz".format(commit_id = RULES_CC_COMMIT_ID),
-    ],
+    urls = ["https://github.com/bazelbuild/rules_cc/releases/download/0.0.1/rules_cc-0.0.1.tar.gz"],
+    sha256 = "4dccbfd22c0def164c8f47458bd50e0c7148f3d92002cdb459c2a96a68498241",
 )
 
 http_archive(
-    name = "rules_perl",  # 2021-09-23T03:21:58Z
-    sha256 = "55fbe071971772758ad669615fc9aac9b126db6ae45909f0f36de499f6201dd3",
-    strip_prefix = "rules_perl-2f4f36f454375e678e81e5ca465d4d497c5c02da",
+    name = "rules_perl",
+    sha256 = "3e52a9ab4162d59318adddb911794ff884c30477fb1dcdad92f8fb533edf9110",
+    strip_prefix = "rules_perl-0.2.0",
     urls = [
-        "https://github.com/bazelbuild/rules_perl/archive/2f4f36f454375e678e81e5ca465d4d497c5c02da.tar.gz",
+        "https://github.com/bazelbuild/rules_perl/archive/refs/tags/0.2.0.tar.gz",
     ],
 )
 
@@ -103,10 +100,10 @@ http_archive(
 # 1. Build very basic libraries without any further dependencies.
 # 2. Build too complex to bazelize library.
 http_archive(
-    name = "rules_foreign_cc",  # 2021-12-03T17:15:40Z
-    sha256 = "1df78c7d7eed2dc21b8b325a2853c31933a81e7b780f9a59a5d078be9008b13a",
-    strip_prefix = "rules_foreign_cc-0.7.0",
-    url = "https://github.com/bazelbuild/rules_foreign_cc/archive/0.7.0.tar.gz",
+    name = "rules_foreign_cc",
+    sha256 = "4b33d62cf109bcccf286b30ed7121129cc34cf4f4ed9d8a11f38d9108f40ba74",
+    strip_prefix = "rules_foreign_cc-0.11.1",
+    url = "https://github.com/bazelbuild/rules_foreign_cc/releases/download/0.11.1/rules_foreign_cc-0.11.1.tar.gz",
 )
 
 #
@@ -115,7 +112,7 @@ http_archive(
 
 load("@rules_foreign_cc//foreign_cc:repositories.bzl", "rules_foreign_cc_dependencies")
 
-rules_foreign_cc_dependencies(register_preinstalled_tools = False)
+rules_foreign_cc_dependencies(register_preinstalled_tools = True)
 
 #
 # C++ Dependencies
@@ -145,6 +142,9 @@ http_archive(
 http_archive(
     name = "com_github_google_crc32c",  # 2021-10-05T19:47:30Z
     build_file = "//bazel/third_party/crc32c:crc32c.BUILD",
+    patch_tool = "patch",
+    patch_args = ["-p1"],
+    patches = ["//bazel:configure_template.bzl.patch"],
     sha256 = "ac07840513072b7fcebda6e821068aa04889018f24e10e46181068fb214d7e56",
     strip_prefix = "crc32c-1.1.2",
     urls = ["https://github.com/google/crc32c/archive/1.1.2.tar.gz"],
@@ -172,13 +172,12 @@ http_archive(
 )
 
 http_archive(
-    name = "com_github_google_snappy",  # 2017-08-25
+    name = "com_github_google_snappy",
     build_file = "//bazel/third_party/snappy:snappy.BUILD",
-    sha256 = "3dfa02e873ff51a11ee02b9ca391807f0c8ea0529a4924afa645fbf97163f9d4",
-    strip_prefix = "snappy-1.1.7",
+    sha256 = "7ee7540b23ae04df961af24309a55484e7016106e979f83323536a1322cedf1b",
+    strip_prefix = "snappy-1.2.0",
     urls = [
-        "https://storage.googleapis.com/mirror.tensorflow.org/github.com/google/snappy/archive/1.1.7.tar.gz",
-        "https://github.com/google/snappy/archive/1.1.7.tar.gz",
+        "https://github.com/google/snappy/archive/1.2.0.zip",
     ],
 )
 
@@ -193,15 +192,13 @@ http_archive(
 )
 
 # TODO: SIMD optimization.
-# https://github.com/cloudflare/zlib
 http_archive(
-    name = "com_github_madler_zlib",  # 2017-01-15T17:57:23Z
+    name = "com_github_madler_zlib",
     build_file = "//bazel/third_party/zlib:zlib.BUILD",
-    sha256 = "c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1",
-    strip_prefix = "zlib-1.2.11",
+    # sha256 = "1525952a0a567581792613a9723333d7f8cc20b87a81f920fb8bc7e3f2251428",
+    strip_prefix = "zlib-1.3.1",
     urls = [
-        "https://downloads.sourceforge.net/project/libpng/zlib/1.2.11/zlib-1.2.11.tar.gz",
-        "https://zlib.net/fossils/zlib-1.2.11.tar.gz",
+        "https://github.com/madler/zlib/archive/refs/tags/v1.3.1.tar.gz",
     ],
 )
 
@@ -235,22 +232,11 @@ http_archive(
 )
 
 http_archive(
-    name = "com_google_protobuf",  # 2021-10-29T00:04:02Z
+    name = "com_google_protobuf",
     build_file = "//bazel/third_party/protobuf:protobuf.BUILD",
-    patch_cmds = [
-        "sed -i protobuf.bzl -re '4,4d;417,508d'",
-    ],
-    patch_cmds_win = [
-        """$content = Get-Content 'protobuf.bzl' | Where-Object {
-    -not ($_.ReadCount -ne 4) -and
-    -not ($_.ReadCount -ge 418 -and $_.ReadCount -le 509)
-}
-Set-Content protobuf.bzl -Value $content -Encoding UTF8
-""",
-    ],
-    sha256 = "87407cd28e7a9c95d9f61a098a53cf031109d451a7763e7dd1253abf8b4df422",
-    strip_prefix = "protobuf-3.19.1",
-    urls = ["https://github.com/protocolbuffers/protobuf/archive/refs/tags/v3.19.1.tar.gz"],
+    # sha256 = "87407cd28e7a9c95d9f61a098a53cf031109d451a7763e7dd1253abf8b4df422",
+    strip_prefix = "protobuf-21.12",
+    urls = ["https://github.com/protocolbuffers/protobuf/archive/refs/tags/v21.12.tar.gz"],
 )
 
 http_archive(
@@ -267,8 +253,8 @@ http_archive(
 # https://github.com/google/boringssl/blob/master/INCORPORATING.md
 git_repository(
     name = "boringssl", # 2021-05-01T12:26:01Z
-    commit = "0e6b86549db4c888666512295c3ebd4fa2a402f5", # fips-20210429
-    remote = "https://github.com/google/boringssl",
+    commit = "853ca1ea1168dff08011e5d42d94609cc0ca2e27", # fips-20210429
+    remote = "https://boringssl.googlesource.com/boringssl",
 )
 
 http_archive(

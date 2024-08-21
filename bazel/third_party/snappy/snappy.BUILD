@@ -26,9 +26,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Copied from https://github.com/tensorflow/tensorflow/blob/bdd8bf316e4ab7d699127d192d30eb614a158462/third_party/snappy.BUILD
+# Copied from https://github.com/tensorflow/tensorflow/blob/v2.8.4/third_party/snappy.BUILD
 
-load("@rules_cc//cc:defs.bzl", "cc_library")
+package(default_visibility = ["//visibility:public"])
 
 cc_library(
     name = "snappy",
@@ -38,22 +38,23 @@ cc_library(
         "snappy.h",
         "snappy-internal.h",
         "snappy-sinksource.cc",
+        "snappy-sinksource.h",
         "snappy-stubs-internal.cc",
         "snappy-stubs-internal.h",
         "snappy-stubs-public.h",
     ],
-    hdrs = [
-        "snappy.h",
-        "snappy-sinksource.h",
-    ],
-    copts = [
-        "-DHAVE_CONFIG_H",
-        "-fno-exceptions",
-        "-Wno-sign-compare",
-        "-Wno-shift-negative-value",
-    ],
-    includes = ["."],
-    visibility = ["//visibility:public"],
+    hdrs = ["snappy.h"],
+    copts = ["-DHAVE_CONFIG_H"] + select({
+        "//conditions:default": [
+            "-fno-exceptions",
+            "-Wno-sign-compare",
+            "-Wno-shift-negative-value",
+            "-Wno-implicit-function-declaration",
+        ],
+    }),
+    defines = select({
+        "//conditions:default": ["HAVE_SYS_UIO_H"],
+    }),
 )
 
 genrule(
@@ -117,6 +118,6 @@ genrule(
            "-e 's/$${\\(.*\\)_01}/\\1/g' " +
            "-e 's/$${SNAPPY_MAJOR}/1/g' " +
            "-e 's/$${SNAPPY_MINOR}/1/g' " +
-           "-e 's/$${SNAPPY_PATCHLEVEL}/7/g' " +
+           "-e 's/$${SNAPPY_PATCHLEVEL}/4/g' " +
            "$< >$@"),
 )

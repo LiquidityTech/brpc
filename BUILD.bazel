@@ -222,10 +222,13 @@ BUTIL_SRCS = [
         "src/butil/time/time_mac.cc",
         "src/butil/mac/scoped_mach_port.cc",
     ],
-    "//conditions:default": [
+    "@bazel_tools//platforms:linux": [
         "src/butil/file_util_linux.cc",
         "src/butil/threading/platform_thread_linux.cc",
         "src/butil/strings/sys_string_conversions_posix.cc",
+    ],
+    "//conditions:default": [
+
     ],
 })
 
@@ -311,7 +314,6 @@ cc_library(
         "src/butil/**/**/**/*.hpp",
     ]) + [
         "src/butil/third_party/dmg_fp/dtoa.cc",
-        ":config_h",
     ],
     copts = COPTS + select({
         "//bazel/config:brpc_build_for_unittest": [

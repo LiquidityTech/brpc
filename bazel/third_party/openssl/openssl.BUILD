@@ -27,7 +27,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Copied from https://github.com/bazelbuild/rules_foreign_cc/blob/0.7.0/examples/third_party/openssl/BUILD.openssl.bazel
+# Copied from https://github.com/bazelbuild/rules_foreign_cc/blob/0.10.1/examples/third_party/openssl/BUILD.openssl.bazel
 #
 # Modifications:
 # 1. Create alias `ssl` & `crypto` to align with boringssl.
@@ -38,7 +38,10 @@ load("@rules_foreign_cc//foreign_cc:defs.bzl", "configure_make", "configure_make
 
 filegroup(
     name = "all_srcs",
-    srcs = glob(["**"]),
+    srcs = glob(
+        include = ["**"],
+        exclude = ["*.bazel"],
+    ),
 )
 
 CONFIGURE_OPTIONS = [
@@ -128,7 +131,6 @@ configure_make_variant(
     ],
 )
 
-# https://wiki.openssl.org/index.php/Compilation_and_Installation
 configure_make(
     name = "openssl_default",
     configure_command = "config",
@@ -162,4 +164,5 @@ filegroup(
     name = "gen_dir",
     srcs = [":openssl"],
     output_group = "gen_dir",
+    visibility = ["//visibility:public"],
 )

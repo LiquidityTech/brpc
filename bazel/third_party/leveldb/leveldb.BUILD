@@ -69,4 +69,5 @@ cc_library(
         "@com_github_google_crc32c//:crc32c",
         "@com_github_google_snappy//:snappy",
     ],
+    copts = ["-Iexternal/com_github_google_snappy"],
 )

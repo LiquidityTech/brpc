@@ -100,7 +100,7 @@ include_directories(${LEVELDB_INCLUDE_PATH})
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     set(OPENSSL_ROOT_DIR
-        "/usr/local/opt/openssl"    # Homebrew installed OpenSSL
+        "/opt/homebrew/opt/openssl@3"    # Homebrew installed OpenSSL
         )
 endif()
 
